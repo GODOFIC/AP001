@@ -2,27 +2,43 @@
 #define _OLED_H_
 
 #include <Arduino.h>
+#include <Wire.h>
 #include "OLED_Font.h"
+#include "I2C_Config.h"
 
-#define OLED_SDA 13
-#define OLED_SCK 14
+// OLED显示参数
+#define OLED_WIDTH  128
+#define OLED_HEIGHT 64
+#define OLED_PAGES  8  // HEIGHT/8
 
+
+// 外部变量声明
 extern int32_t humidity;
 extern int32_t temperature;
 
-void OLED_i2c_start(void);
-void OLED_i2c_stop(void);
-void OLED_i2c_write_byte(uint8_t byte);
-void OLED_Write_Command(uint8_t command);
-void OLED_Write_Data(uint8_t data);
-void OLED_Set_Cursor(uint8_t Y, uint8_t X);
-void OLED_ClearAll(void);
-void OLED_Clear(uint8_t Line, uint8_t Column,uint8_t Length);
-void OLED_Show_Char(uint8_t Line, uint8_t Column, char Char);
-void OLED_Show_Char_CN(uint8_t Line, uint8_t Column,const uint8_t font[][16], uint8_t Length);
-void OLED_Show_String(uint8_t Line, uint8_t Column, char *String);
+// OLED控制函数
+bool OLED_Write_Command(uint8_t command);
+bool OLED_Write_Data(uint8_t data);
+bool OLED_Write_Data_Batch(const uint8_t* data, uint8_t length);
+bool OLED_Set_Cursor(uint8_t Y, uint8_t X);
+bool OLED_ClearAll(void);
+bool OLED_Clear(uint8_t Line, uint8_t Column, uint8_t Length);
+bool OLED_Clear_Rect(uint8_t startLine, uint8_t startColumn, uint8_t endLine, uint8_t endColumn);
+
+// OLED显示函数
+bool OLED_Show_Char(uint8_t Line, uint8_t Column, char Char);
+bool OLED_Show_Char_CN(uint8_t Line, uint8_t Column, const uint8_t font[][16], uint8_t Length);
+bool OLED_Show_String(uint8_t Line, uint8_t Column, char *String);
 uint32_t OLED_Pow(uint32_t X, uint32_t Y);
-void OLED_Show_SignedNum(uint8_t Line, uint8_t Column, int32_t Number, uint8_t Length);
-void OLED_Init(void);
+bool OLED_Show_SignedNum(uint8_t Line, uint8_t Column, int32_t Number, uint8_t Length);
+
+// OLED初始化
+bool OLED_Init(void);
+
+// AHT20调用
+void OLED_AHT20_display(int32_t tem,int32_t hum);
+
+// PWM调用
+void OLED_fan_speed_display(int level, bool flag);
 
 #endif

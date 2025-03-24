@@ -2,27 +2,24 @@
 #define _AHT20_I2C_H_
 
 #include <Arduino.h>
+#include <Wire.h>
 #include "OLED.h"
+#include "I2C_Config.h"
 
-// 传感器相关定义
-#define AHT20_ADDR 0x38  // AHT20 I2C 地址
+// 命令字节
+#define AHT20_CMD_INIT      0xBE
+#define AHT20_CMD_MEASURE   0xAC
+#define AHT20_CMD_STATUS    0x71
 
-#define TH_SDA 21  // 设置 TH_SDA 引脚
-#define TH_SCL 22  // 设置 TH_SCL 引脚
+// 函数声明
 
-void i2c_start(void);
-void i2c_stop(void);
-void send_ack(void);
-void send_nack(void);
-bool wait_for_ack(void);
-void i2c_write_byte(uint8_t byte);
-uint8_t i2c_read_byte(void);
-void AHT20_setup(void);
 bool isCalibrated(void);
 uint8_t readStatus(void);
-void initAHT20(void);
-void AHT20_measurement(void);
-void readData(void);
-void OLED_displayMeasurement(void);
+bool initAHT20(void);
+bool readData(void);
+
+void AHT20_setup(void);
+bool AHT20_measurement(void);
+
 
 #endif
