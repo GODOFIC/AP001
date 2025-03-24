@@ -1,12 +1,9 @@
 #include "getTime.h"
 
-extern uint8_t Row;
-extern uint8_t Column;
-
 // 替换为您的 WiFi 网络名称和密码
 const char* ssid     = "HQU";
-const char* username = "学号";
-const char* password = "校园网密码";
+const char* username = "2215105045";
+const char* password = "Zy296428";
 
 
 // 定义 NTP 客户端以获取时间
@@ -101,7 +98,7 @@ void getTime(void)
   
 }
 
-void OLED_displayTime(void) 
+void wifi_time_flush(void) 
 {
   if (WiFi.status() != WL_CONNECTED)
   {
@@ -148,57 +145,9 @@ void OLED_displayTime(void)
     return;
   }
   
-  // case中没有break会继续执行之后的case代码
-  // 如果月改变更新所有时间项
-  // 如果日改变更新日时分
-  // 以此类推
-  // 可以实现在分改变时仅刷新OLED上的分而不刷新其他项
+
+  OLED_time_display(flag,month,day,hour,minute);
   
-  int sizeOfMonth = (month >= 10) ? 2 : 1;
-  int sizeOfDay = (day >= 10) ? 2 : 1;
-  
-  switch (flag) 
-  {
-    case 1:
-        OLED_Show_SignedNum(4, 1, month, sizeOfMonth);
-        OLED_Show_Char_CN(4, (1 + sizeOfMonth), font_month, 1);
-
-    case 2:
-        OLED_Show_SignedNum(4, (3 + sizeOfMonth), day, sizeOfDay);
-        OLED_Show_Char_CN(4, (3 + sizeOfMonth + sizeOfDay), font_day, 1);
-        OLED_Show_Char(4, (5 + sizeOfMonth + sizeOfDay), ' ');
-
-    case 3:
-        if (hour < 10) 
-        {
-            OLED_Show_Char(4, (6 + sizeOfMonth + sizeOfDay), '0');
-            OLED_Show_SignedNum(4, (7 + sizeOfMonth + sizeOfDay), hour, 1);
-        } 
-        else 
-        {
-            OLED_Show_SignedNum(4, (6 + sizeOfMonth + sizeOfDay), hour, 2);
-        }
-        OLED_Show_Char(4, (8 + sizeOfMonth + sizeOfDay), ':');
-
-    case 4:
-        
-        if (minute < 10) 
-        {
-            OLED_Show_Char(4, (9 + sizeOfMonth + sizeOfDay), '0');
-            OLED_Show_SignedNum(4, (10 + sizeOfMonth + sizeOfDay), minute, 1);
-        } 
-        else 
-        {
-            OLED_Show_SignedNum(4, (9 + sizeOfMonth + sizeOfDay), minute, 2);
-        }
-
-        // 确保后面没有其他显示
-        OLED_Clear(4, (11 + sizeOfMonth + sizeOfDay), (16 - (11 + sizeOfMonth + sizeOfDay) + 1));
-        break;
-
-    default:
-        break;
-}
   lastMonth = month;
   lastDay = day;
   lastHour = hour;
@@ -223,10 +172,5 @@ void OLED_displayTime(void)
   Serial.println(minute);
   
 
-  // 如果OLED显示因为未知原因时不时出现整体向下移动的情况启用下列代码
-  #if 1
   
-  OLED_Write_Command(0x40); //重新刷新显示开始行
-
-  #endif
 }

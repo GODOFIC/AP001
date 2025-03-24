@@ -19,10 +19,11 @@
 #define EEPROM_ADDR 0  // EEPROM 保存风速档位
 
 // 初始化函数声明
-void PWM_Interrupt_init();
+void fan_init();
 
-// 中断服务函数声明
-void IRAM_ATTR handle_fan_switch();
-void IRAM_ATTR handle_fan_speed_ctl();
+void handle_fan_switch();
+void handle_fan_speed_ctl();
+
+void polling_fan_button();
 
 #endif

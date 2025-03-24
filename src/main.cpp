@@ -2,11 +2,13 @@
 #include "I2C_Config.h"
 #include "AHT20_i2c.h"
 #include "OLED.h"
-#include "PWM_Interrupt.h"
 #include "getTime.h"
+#include "fan_control.h"
 
 u_int8_t count = 0;    // 用于记录时间间隔
 bool firstRun = true; // 标志变量，记录是否为第一次运行
+
+#define delay_time_ms 200
 
 void setup() 
 {
@@ -18,13 +20,13 @@ void setup()
   
   OLED_Init();
 
-  PWM_Interrupt_init();
+  fan_init();
   
   // 初始化AHT20
   AHT20_setup();
   
   // 初始化WiFi
-  //WiFi_init();
+  WiFi_init();
   
   Serial.println("System initialization complete");
 }
@@ -41,7 +43,7 @@ void loop()
   else 
   {
     // 判断是否达到4秒间隔
-    if (count == 4) 
+    if ((count * delay_time_ms) >= 4000) 
     {
       if(!AHT20_measurement()) {
         Serial.println("AHT20 measurement failed");
@@ -51,8 +53,8 @@ void loop()
   }
   
   //OLED_displayTime(); // 更新时间显示
-
-  delay(1000); // 1秒延时以更新时间
+  polling_fan_button();
+  delay(delay_time_ms); 
   
   count++;
 }

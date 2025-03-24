@@ -1,11 +1,11 @@
-#include "PWM_Interrupt.h"
+#include "fan_control.h"
 
 // PWM 占空比（档位）
 int fanSpeedLevels[] = {25, 50, 75, 100};  // 风扇四档：25%, 50%, 75%, 100%
 int currentLevel = 0;   // 当前风速档位
 bool isFanOn = 0;   // 风扇开关状态
 
-void PWM_Interrupt_init()
+void fan_init()
 {
   // 初始化 EEPROM(1字节)
   EEPROM.begin(1);  
@@ -28,16 +28,11 @@ void PWM_Interrupt_init()
     EEPROM.write(EEPROM_ADDR, currentLevel);   // 保存到 EEPROM
     EEPROM.commit();       // 提交更改
   }
-
-  // 设定中断
-  attachInterrupt(digitalPinToInterrupt(fan_speed_ctl), handle_fan_speed_ctl, FALLING);
-  attachInterrupt(digitalPinToInterrupt(fan_switch), handle_fan_switch, FALLING);
-  
   
 }
 
 // 风扇开关控制
-void IRAM_ATTR handle_fan_switch() 
+void handle_fan_switch() 
 {
   if (!isFanOn) 
   {
@@ -45,20 +40,20 @@ void IRAM_ATTR handle_fan_switch()
     isFanOn = 1;
     digitalWrite(fan_power, HIGH);
     analogWrite(fan_pwm, map(fanSpeedLevels[currentLevel], 0, 100, 0, 255));  // 开启风扇并设定当前档位
-    OLED_fan_speed_display(currentLevel, 1); // OLED显示当前风档
+    OLED_fan_speed_display(currentLevel, true); // OLED显示当前风档
   } 
   else 
   {
     isFanOn = 0;  
     digitalWrite(fan_power, LOW);
     pinMode(fan_pwm, INPUT);  // 将引脚设置为输入模式，恢复到未初始化状态
-    OLED_fan_speed_display(currentLevel, 0);
+    OLED_fan_speed_display(currentLevel, false);
   }
 }
 
 // 风速控制按键中断处理函数
-void IRAM_ATTR handle_fan_speed_ctl() 
-{
+void handle_fan_speed_ctl() 
+{ 
   if(!isFanOn)
     return;
 
@@ -66,7 +61,7 @@ void IRAM_ATTR handle_fan_speed_ctl()
   {
     currentLevel++;
     analogWrite(fan_pwm, map(fanSpeedLevels[currentLevel], 0, 100, 0, 255));  // 设置较高的风速档位
-    OLED_fan_speed_display(currentLevel, 1);
+    OLED_fan_speed_display(currentLevel, true);
     EEPROM.write(EEPROM_ADDR, currentLevel);  // 保存当前档位
     EEPROM.commit(); // 提交更改
   } 
@@ -74,10 +69,22 @@ void IRAM_ATTR handle_fan_speed_ctl()
   {
     currentLevel = 0;
     analogWrite(fan_pwm, map(fanSpeedLevels[currentLevel], 0, 100, 0, 255));  // 设置较低的风速档位
-    OLED_fan_speed_display(currentLevel, 1);
+    OLED_fan_speed_display(currentLevel, true);
     EEPROM.write(EEPROM_ADDR, currentLevel);  // 保存当前档位
     EEPROM.commit();// 提交更改
 
+  }
+}
+
+void polling_fan_button() 
+{ 
+  if (digitalRead(fan_switch) == LOW) 
+  {
+    handle_fan_switch();
+  }
+  if (digitalRead(fan_speed_ctl) == LOW) 
+  {
+    handle_fan_speed_ctl();
   }
 }
 

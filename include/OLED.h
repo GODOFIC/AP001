@@ -5,6 +5,7 @@
 #include <Wire.h>
 #include "OLED_Font.h"
 #include "I2C_Config.h"
+#include "getTime.h"
 
 // OLED显示参数
 #define OLED_WIDTH  128
@@ -40,5 +41,8 @@ void OLED_AHT20_display(int32_t tem,int32_t hum);
 
 // PWM调用
 void OLED_fan_speed_display(int level, bool flag);
+
+// time调用
+void OLED_time_display(int flag, int month, int day, int hour, int minute);
 
 #endif
