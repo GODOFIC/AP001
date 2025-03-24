@@ -14,6 +14,6 @@ extern "C"
 
 void WiFi_init(void);
 void getTime(void);
-void OLED_displayTime(void);
+void wifi_time_flush(void);
 
 #endif

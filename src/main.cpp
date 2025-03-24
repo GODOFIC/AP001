@@ -52,7 +52,7 @@ void loop()
     }
   }
   
-  //OLED_displayTime(); // 更新时间显示
+  wifi_time_flush(); // 更新时间显示
   polling_fan_button();
   delay(delay_time_ms); 
   
