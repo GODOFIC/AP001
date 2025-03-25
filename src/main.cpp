@@ -7,6 +7,7 @@
 #include "getWeather.h"
 
 u_int8_t count = 0;    // 用于记录时间间隔
+u_int8_t count_weather = 0;
 bool firstRun = true; // 标志变量，记录是否为第一次运行
 
 #define delay_time_ms 200
@@ -36,9 +37,6 @@ void loop()
 {
   if (firstRun) 
   {
-    if(!AHT20_measurement()) {
-      Serial.println("First AHT20 measurement failed");
-    }
     getWeather();
     firstRun = false; // 将标志变量设为false，表示已完成第一次运行
   } 
@@ -47,11 +45,13 @@ void loop()
     // 判断是否达到4秒间隔
     if ((count * delay_time_ms) >= 4000) 
     {
-      if(!AHT20_measurement()) {
-        Serial.println("AHT20 measurement failed");
-      }
-      getWeather();
+      AHT20_measurement();
       count = 0;
+    }
+    if ((count_weather * delay_time_ms) >= 30000) 
+    {
+      getWeather();
+      count_weather = 0;
     }
   }
   

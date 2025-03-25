@@ -369,20 +369,20 @@ bool OLED_Init(void)
   if(!OLED_ClearAll()) return false;           // OLED清屏
   
   // 显示温湿度提示信息
-  if(!OLED_Show_Char_CN(1, 1, font_temperature, 2)) return false;
-  if(!OLED_Show_Char(1, 5, ':')) return false;
+  if(!OLED_Show_Char_CN(4, 1, font_temperature, 2)) return false;
+  if(!OLED_Show_Char(4, 5, ':')) return false;
   
-  if(!OLED_Show_Char_CN(1, 9, font_humidity, 2)) return false;
-  if(!OLED_Show_Char(1, 13, ':')) return false;
+  if(!OLED_Show_Char_CN(4, 9, font_humidity, 2)) return false;
+  if(!OLED_Show_Char(4, 13, ':')) return false;
 
   // 显示"天气:"
-  OLED_Show_Char_CN(2, 1, font_weather, 2); // 显示“风扇状态”
-  OLED_Show_Char(2, 5, ':'); // 显示“:”
+  OLED_Show_Char_CN(3, 1, font_tianqi, 2); 
+  OLED_Show_Char(3, 5, ':'); 
 
   // 显示风扇档位提示信息
-  if(!OLED_Show_Char_CN(3, 1, font_FanStatus, 4)) return false; // 显示"风扇状态"
-  if(!OLED_Show_Char(3, 9, ':')) return false; // 显示":"
-  if(!OLED_Show_Char_CN(3, 10, font_Off, 2)) return false; // 显示"关闭"
+  if(!OLED_Show_Char_CN(2, 1, font_FanStatus, 4)) return false; // 显示"风扇状态"
+  if(!OLED_Show_Char(2, 9, ':')) return false; // 显示":"
+  if(!OLED_Show_Char_CN(2, 10, font_Off, 2)) return false; // 显示"关闭"
   
   
   return true;
@@ -411,21 +411,21 @@ void OLED_AHT20_display(int32_t tem,int32_t hum)
   if(needUpdate)
   {
     // 更新温度显示
-    if(!OLED_Clear(1, 6, 2)) {
+    if(!OLED_Clear(4, 6, 2)) {
       Serial.println("Failed to clear temperature area");
       return;
     }
-    if(!OLED_Show_SignedNum(1, 6, tem, 2)) {
+    if(!OLED_Show_SignedNum(4, 6, tem, 2)) {
       Serial.println("Failed to show temperature");
       return;
     }
     
     // 更新湿度显示
-    if(!OLED_Clear(1, 14, 2)) {
+    if(!OLED_Clear(4, 14, 2)) {
       Serial.println("Failed to clear humidity area");
       return;
     }
-    if(!OLED_Show_SignedNum(1, 14, hum, 2)) {
+    if(!OLED_Show_SignedNum(4, 14, hum, 2)) {
       Serial.println("Failed to show humidity");
       return;
     }
@@ -441,26 +441,26 @@ void OLED_fan_speed_display(int level, bool flag)
 {
   if(!flag)
   {
-    OLED_Clear(3, 10, 4); //清除Line 3 后 4 Column的内容
-    OLED_Show_Char_CN(3, 10, font_Off, 2); // 显示“关闭”
+    OLED_Clear(2, 10, 4); //清除Line 3 后 4 Column的内容
+    OLED_Show_Char_CN(2, 10, font_Off, 2); // 显示“关闭”
     return;
   }
   
-  OLED_Clear(3, 10, 4); //清除Line 3 后 4 Column的内容
+  OLED_Clear(2, 10, 4); //清除Line 3 后 4 Column的内容
 
   switch (level)
   {
   case 0:
-    OLED_Show_Char_CN(3, 10, font_low, 2);
+    OLED_Show_Char_CN(2, 10, font_low, 2);
     break;
   case 1:
-    OLED_Show_Char_CN(3, 10, font_middle, 2);
+    OLED_Show_Char_CN(2, 10, font_middle, 2);
     break;
   case 2:
-    OLED_Show_Char_CN(3, 10, font_high, 2);
+    OLED_Show_Char_CN(2, 10, font_high, 2);
     break;
   case 3:
-    OLED_Show_Char_CN(3, 10, font_superstrong, 2);
+    OLED_Show_Char_CN(2, 10, font_superstrong, 2);
     break;
   default:
     Serial.print(" OLED fan level error!");
@@ -482,40 +482,40 @@ void OLED_time_display(int flag, int month, int day, int hour, int minute)
   switch (flag) 
   {
     case 1:
-        OLED_Show_SignedNum(4, 1, month, sizeOfMonth);
-        OLED_Show_Char_CN(4, (1 + sizeOfMonth), font_month, 1);
+        OLED_Show_SignedNum(1, 1, month, sizeOfMonth);
+        OLED_Show_Char_CN(1, (1 + sizeOfMonth), font_month, 1);
 
     case 2:
-        OLED_Show_SignedNum(4, (3 + sizeOfMonth), day, sizeOfDay);
-        OLED_Show_Char_CN(4, (3 + sizeOfMonth + sizeOfDay), font_day, 1);
-        OLED_Show_Char(4, (5 + sizeOfMonth + sizeOfDay), ' ');
+        OLED_Show_SignedNum(1, (3 + sizeOfMonth), day, sizeOfDay);
+        OLED_Show_Char_CN(1, (3 + sizeOfMonth + sizeOfDay), font_day, 1);
+        OLED_Show_Char(1, (5 + sizeOfMonth + sizeOfDay), ' ');
 
     case 3:
         if (hour < 10) 
         {
-            OLED_Show_Char(4, (6 + sizeOfMonth + sizeOfDay), '0');
-            OLED_Show_SignedNum(4, (7 + sizeOfMonth + sizeOfDay), hour, 1);
+            OLED_Show_Char(1, (6 + sizeOfMonth + sizeOfDay), '0');
+            OLED_Show_SignedNum(1, (7 + sizeOfMonth + sizeOfDay), hour, 1);
         } 
         else 
         {
-            OLED_Show_SignedNum(4, (6 + sizeOfMonth + sizeOfDay), hour, 2);
+            OLED_Show_SignedNum(1, (6 + sizeOfMonth + sizeOfDay), hour, 2);
         }
-        OLED_Show_Char(4, (8 + sizeOfMonth + sizeOfDay), ':');
+        OLED_Show_Char(1, (8 + sizeOfMonth + sizeOfDay), ':');
 
     case 4:
         
         if (minute < 10) 
         {
-            OLED_Show_Char(4, (9 + sizeOfMonth + sizeOfDay), '0');
-            OLED_Show_SignedNum(4, (10 + sizeOfMonth + sizeOfDay), minute, 1);
+            OLED_Show_Char(1, (9 + sizeOfMonth + sizeOfDay), '0');
+            OLED_Show_SignedNum(1, (10 + sizeOfMonth + sizeOfDay), minute, 1);
         } 
         else 
         {
-            OLED_Show_SignedNum(4, (9 + sizeOfMonth + sizeOfDay), minute, 2);
+            OLED_Show_SignedNum(1, (9 + sizeOfMonth + sizeOfDay), minute, 2);
         }
 
         // 确保后面没有其他显示
-        OLED_Clear(4, (11 + sizeOfMonth + sizeOfDay), (16 - (11 + sizeOfMonth + sizeOfDay) + 1));
+        OLED_Clear(1, (11 + sizeOfMonth + sizeOfDay), (16 - (11 + sizeOfMonth + sizeOfDay) + 1));
         break;
 
     default:
@@ -528,4 +528,127 @@ void OLED_time_display(int flag, int month, int day, int hour, int minute)
   OLED_Write_Command(0x40); //重新刷新显示开始行
 
   #endif
+}
+
+void OLED_weather_display(const char* lastWeather, const char* weather)
+{
+  if(strcmp(lastWeather, weather) == 0)
+  {
+    return ;
+  }
+  
+  OLED_Clear(3, 6, 11);
+
+  if (strcmp(weather, "晴") == 0)
+  {
+      OLED_Show_Char_CN(3, 6, font_qing, 1);
+  }
+  else if (strcmp(weather, "少云") == 0)
+  {
+      OLED_Show_Char_CN(3, 6, font_shaoyun, 2);
+  }
+  else if (strcmp(weather, "晴间多云") == 0)
+  {
+      OLED_Show_Char_CN(3, 6, font_qingjianduoyun, 4);
+  }
+  else if (strcmp(weather, "多云") == 0)
+  {
+      OLED_Show_Char_CN(3, 6, font_duoyun, 2);
+  }
+  else if (strcmp(weather, "阴") == 0)
+  {
+      OLED_Show_Char_CN(3, 6, font_yin, 1);
+  }
+  else if (strcmp(weather, "有风") == 0)
+  {
+      OLED_Show_Char_CN(3, 6, font_youfeng, 2);
+  }
+  else if (strcmp(weather, "微风") == 0)
+  {
+      OLED_Show_Char_CN(3, 6, font_weifeng, 2);
+  }
+  else if (strcmp(weather, "和风") == 0)
+  {
+      OLED_Show_Char_CN(3, 6, font_hefeng, 2);
+  }
+  else if (strcmp(weather, "清风") == 0)
+  {
+      OLED_Show_Char_CN(3, 6, font_qingfeng, 2);
+  }
+  else if (strcmp(weather, "强风/劲风") == 0)
+  {
+      OLED_Show_Char_CN(3, 6, font_qiangfeng, 2);
+  }
+  else if (strcmp(weather, "疾风") == 0)
+  {
+      OLED_Show_Char_CN(3, 6, font_jifeng, 2);
+  }
+  else if (strcmp(weather, "大风") == 0)
+  {
+      OLED_Show_Char_CN(3, 6, font_dafeng, 2);
+  }
+  else if (strcmp(weather, "烈风") == 0)
+  {
+      OLED_Show_Char_CN(3, 6, font_liefeng, 2);
+  }
+  else if (strcmp(weather, "风暴") == 0)
+  {
+      OLED_Show_Char_CN(3, 6, font_fengbao, 2);
+  }
+  else if (strcmp(weather, "狂暴风") == 0)
+  {
+      OLED_Show_Char_CN(3, 6, font_kuangbaofeng, 3);
+  }
+  else if (strcmp(weather, "飓风") == 0)
+  {
+      OLED_Show_Char_CN(3, 6, font_jufeng, 2);
+  }
+  else if (strcmp(weather, "热带风暴") == 0)
+  {
+      OLED_Show_Char_CN(3, 6, font_redaifengbao, 4);
+  }
+  else if (strcmp(weather, "平静") == 0)
+  {
+      OLED_Show_Char_CN(3, 6, font_pingjing, 2);
+  }
+  else if (strcmp(weather, "霾") == 0 || strcmp(weather, "中度霾") == 0 || strcmp(weather, "重度霾") == 0 || strcmp(weather, "严重霾") == 0)
+  {
+      OLED_Show_Char_CN(3, 6, font_mai, 1);
+  }
+  else if (strcmp(weather, "阵雨") == 0 || strcmp(weather, "雷阵雨") == 0 || strcmp(weather, "雷阵雨并伴有冰雹") == 0 || strcmp(weather, "大暴雨") == 0 || strcmp(weather, "特大暴雨") == 0 || strcmp(weather, "强阵雨") == 0 || strcmp(weather, "强雷阵雨") == 0 || strcmp(weather, "极端降雨") == 0 || strcmp(weather, "毛毛雨/细雨") == 0 || strcmp(weather, "雨") == 0 || strcmp(weather,"小雨-中雨") == 0|| strcmp(weather, "中雨-大雨") == 0 || strcmp(weather, "大雨-暴雨") == 0 || strcmp(weather, "暴雨-大暴雨") == 0 || strcmp(weather, "大暴雨-特大暴雨") == 0 || strcmp(weather, "雨雪天气") == 0 || strcmp(weather, "雨夹雪") == 0 || strcmp(weather, "阵雨夹雪") == 0 || strcmp(weather, "冻雨") == 0)
+  {
+      OLED_Show_Char_CN(3, 6, font_yu, 1);
+  }
+  else if (strcmp(weather, "小雨") == 0)
+  {
+      OLED_Show_Char_CN(3, 6, font_xiaoyu, 2);
+  }
+  else if (strcmp(weather, "中雨") == 0)
+  {
+      OLED_Show_Char_CN(3, 6, font_zhongyu, 2);
+  }
+  else if (strcmp(weather, "大雨") == 0)
+  {
+      OLED_Show_Char_CN(3, 6, font_dayu, 2);
+  }
+  else if (strcmp(weather, "暴雨") == 0)
+  {
+      OLED_Show_Char_CN(3, 6, font_baoyu, 2);
+  }
+  else if (strcmp(weather, "雪") == 0 || strcmp(weather, "阵雪") == 0 || strcmp(weather, "小雪") == 0 || strcmp(weather, "中雪") == 0 || strcmp(weather, "大雪") == 0 || strcmp(weather, "暴雪") == 0 || strcmp(weather, "小雪-中雪") == 0 || strcmp(weather, "中雪-大雪") == 0 || strcmp(weather, "大雪-暴雪") == 0)
+  {
+      OLED_Show_Char_CN(3, 6, font_xue, 1);
+  }
+  else if (strcmp(weather, "浮尘") == 0 || strcmp(weather, "扬沙") == 0 || strcmp(weather, "沙尘暴") == 0 || strcmp(weather, "强沙尘暴") == 0 || strcmp(weather, "龙卷风") == 0)
+  {
+      OLED_Show_Char_CN(3, 6, font_fuchen, 2);
+  }
+  else if (strcmp(weather, "雾") == 0 || strcmp(weather, "浓雾") == 0 || strcmp(weather, "强浓雾") == 0 || strcmp(weather, "轻雾") == 0 || strcmp(weather, "大雾") == 0 || strcmp(weather, "特强大雾") == 0 )
+  {
+      OLED_Show_Char_CN(3, 6, font_wu, 1);
+  }
+  else
+  {
+      OLED_Show_Char_CN(3, 6, font_weizhi, 2);
+  }
 }

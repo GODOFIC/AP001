@@ -40,4 +40,7 @@ void OLED_fan_speed_display(int level, bool flag);
 // time调用
 void OLED_time_display(int flag, int month, int day, int hour, int minute);
 
+// weather调用
+void OLED_weather_display(const char* lastWeather, const char* weather);
+
 #endif

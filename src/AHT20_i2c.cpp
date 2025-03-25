@@ -15,6 +15,9 @@ void AHT20_setup(void)
   {
     initAHT20();  // 初始化传感器
   }
+
+  delay(100);
+  AHT20_measurement();
 }
 
 // 检查校准位

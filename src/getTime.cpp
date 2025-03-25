@@ -7,8 +7,8 @@ const char* ssid     = "HQU";
 const char* username = "2215105045";
 const char* password = "Zy296428";
 #else
-const char* ssid     = "1";
-const char* password = "12345678";
+const char* ssid     = "Xiaomi_B506"; 
+const char* password = "zhx654321";
 #endif
 
 // 定义 NTP 客户端以获取时间

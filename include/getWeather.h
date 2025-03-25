@@ -6,7 +6,6 @@
 #include <ArduinoJson.h>
 #include "OLED.h"
 
-void weather_display(const char* weather);
 void getWeather(void);
 
 #endif
