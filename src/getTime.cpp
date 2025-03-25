@@ -4,11 +4,11 @@
 
 #ifdef _CAMPUS_NET
 const char* ssid     = "HQU";
-const char* username = "2215105045";
-const char* password = "Zy296428";
+const char* username = "xxx";
+const char* password = "xxx";
 #else
-const char* ssid     = "Xiaomi_B506"; 
-const char* password = "zhx654321";
+const char* ssid     = "xxx"; 
+const char* password = "xxx";
 #endif
 
 // 定义 NTP 客户端以获取时间
