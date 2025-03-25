@@ -12,11 +12,6 @@
 #define OLED_HEIGHT 64
 #define OLED_PAGES  8  // HEIGHT/8
 
-
-// 外部变量声明
-extern int32_t humidity;
-extern int32_t temperature;
-
 // OLED控制函数
 bool OLED_Write_Command(uint8_t command);
 bool OLED_Write_Data(uint8_t data);

@@ -4,6 +4,7 @@
 #include "OLED.h"
 #include "getTime.h"
 #include "fan_control.h"
+#include "getWeather.h"
 
 u_int8_t count = 0;    // 用于记录时间间隔
 bool firstRun = true; // 标志变量，记录是否为第一次运行
@@ -38,6 +39,7 @@ void loop()
     if(!AHT20_measurement()) {
       Serial.println("First AHT20 measurement failed");
     }
+    getWeather();
     firstRun = false; // 将标志变量设为false，表示已完成第一次运行
   } 
   else 
@@ -48,6 +50,7 @@ void loop()
       if(!AHT20_measurement()) {
         Serial.println("AHT20 measurement failed");
       }
+      getWeather();
       count = 0;
     }
   }

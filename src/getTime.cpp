@@ -1,10 +1,15 @@
 #include "getTime.h"
 
 // 替换为您的 WiFi 网络名称和密码
+
+#ifdef _CAMPUS_NET
 const char* ssid     = "HQU";
 const char* username = "2215105045";
 const char* password = "Zy296428";
-
+#else
+const char* ssid     = "1";
+const char* password = "12345678";
+#endif
 
 // 定义 NTP 客户端以获取时间
 WiFiUDP ntpUDP;
@@ -27,7 +32,7 @@ void WiFi_init(void)
   WiFi.disconnect(true);  // 断开现有 Wi-Fi 连接
   WiFi.mode(WIFI_STA);    // 设置 Wi-Fi 模式为 STA（客户端模式）
   
-  #if 1   // 使用WPA2-企业认证连接WiFi
+  #ifdef _CAMPUS_NET   // 使用WPA2-企业认证连接WiFi
     struct station_config config;
     memset(&config, 0, sizeof(config));
     strcpy(reinterpret_cast<char*>(config.ssid), ssid);

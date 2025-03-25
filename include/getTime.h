@@ -16,4 +16,6 @@ void WiFi_init(void);
 void getTime(void);
 void wifi_time_flush(void);
 
+#define _CAMPUS_NET
+
 #endif

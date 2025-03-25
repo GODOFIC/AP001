@@ -371,29 +371,38 @@ bool OLED_Init(void)
   // 显示温湿度提示信息
   if(!OLED_Show_Char_CN(1, 1, font_temperature, 2)) return false;
   if(!OLED_Show_Char(1, 5, ':')) return false;
-  if(!OLED_Show_Char_CN(1, 6, font_waitToMeasure, 4)) return false;
   
-  if(!OLED_Show_Char_CN(2, 1, font_humidity, 2)) return false;
-  if(!OLED_Show_Char(2, 5, ':')) return false;
-  if(!OLED_Show_Char_CN(2, 6, font_waitToMeasure, 4)) return false;
+  if(!OLED_Show_Char_CN(1, 9, font_humidity, 2)) return false;
+  if(!OLED_Show_Char(1, 13, ':')) return false;
+
+  // 显示"天气:"
+  OLED_Show_Char_CN(2, 1, font_weather, 2); // 显示“风扇状态”
+  OLED_Show_Char(2, 5, ':'); // 显示“:”
 
   // 显示风扇档位提示信息
   if(!OLED_Show_Char_CN(3, 1, font_FanStatus, 4)) return false; // 显示"风扇状态"
   if(!OLED_Show_Char(3, 9, ':')) return false; // 显示":"
   if(!OLED_Show_Char_CN(3, 10, font_Off, 2)) return false; // 显示"关闭"
   
+  
   return true;
 }
 
 void OLED_AHT20_display(int32_t tem,int32_t hum)
 {
+  if((tem >= 100) || (hum >= 100) || (tem < 0) || (hum < 0))
+  {
+    Serial.println("Invalid temperature or humidity value");
+    return;
+  }
+
   static int32_t lastTemperature = 0;
   static int32_t lastHumidity = 0;
 
   bool needUpdate = false;
   
   // 检查温度或湿度是否变化
-  if(tem != lastTemperature || hum != lastHumidity) 
+  if((tem != lastTemperature) || (hum != lastHumidity)) 
   {
     needUpdate = true;
   }
@@ -402,21 +411,21 @@ void OLED_AHT20_display(int32_t tem,int32_t hum)
   if(needUpdate)
   {
     // 更新温度显示
-    if(!OLED_Clear(1, 6, 11)) {
+    if(!OLED_Clear(1, 6, 2)) {
       Serial.println("Failed to clear temperature area");
       return;
     }
-    if(!OLED_Show_SignedNum(1, 6, temperature, 2)) {
+    if(!OLED_Show_SignedNum(1, 6, tem, 2)) {
       Serial.println("Failed to show temperature");
       return;
     }
     
     // 更新湿度显示
-    if(!OLED_Clear(2, 6, 11)) {
+    if(!OLED_Clear(1, 14, 2)) {
       Serial.println("Failed to clear humidity area");
       return;
     }
-    if(!OLED_Show_SignedNum(2, 6, humidity, 2)) {
+    if(!OLED_Show_SignedNum(1, 14, hum, 2)) {
       Serial.println("Failed to show humidity");
       return;
     }
